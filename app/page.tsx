@@ -27,11 +27,10 @@ export default function Home() {
   const openEvent = (event: typeof events[number]) => { setSelectedEvent(event); setInterested(false); setScreen('detail') }
 
   return <main className="min-h-screen bg-background text-foreground">
-    <header className="mx-auto flex w-full max-w-5xl items-center justify-between border-b border-border px-4 py-4 sm:px-6 sm:py-5 md:px-8">
-      <button className="flex items-center gap-2 font-serif text-xl font-semibold tracking-tight" onClick={() => setScreen('landing')} aria-label="Go to home"><span className="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground"><Heart className="size-4 fill-current" /></span>nearby</button>
-      <nav aria-label="Main navigation" className="flex items-center gap-3 text-xs font-medium sm:gap-5 sm:text-sm">
-        {screen === 'events' && <button onClick={() => setScreen('landing')} className="text-muted-foreground transition-colors hover:text-foreground">Home</button>}
-        
+    <header className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 border-b border-border px-3 py-3 sm:gap-6 sm:px-6 sm:py-5 md:px-8">
+      <button className="flex min-w-0 shrink items-center gap-2 font-serif text-lg font-semibold tracking-tight sm:text-xl" onClick={() => setScreen('landing')} aria-label="Go to home"><span className="grid size-8 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground"><Heart className="size-4 fill-current" /></span><span className="truncate">nearby</span></button>
+      <nav aria-label="Main navigation" className="flex shrink-0 items-center gap-2 text-xs font-medium sm:gap-5 sm:text-sm">
+        {screen !== 'landing' && <button onClick={() => setScreen('landing')} className="whitespace-nowrap rounded-full px-2 py-1 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground sm:px-3">Home</button>}
       </nav>
     </header>
 
