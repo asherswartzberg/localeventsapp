@@ -1,47 +1,36 @@
-export default function Page() {
-  return (
-    <main
-      style={{
-        colorScheme: 'light dark',
-        position: 'relative',
-        display: 'flex',
-        minHeight: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'light-dark(#fff, #000)',
-        color: 'light-dark(#000, #fff)',
-      }}
-    >
-      <svg
-        aria-hidden="true"
-        style={{ width: 80, height: 80 }}
-        width={80}
-        height={80}
-        fill="none"
-        viewBox="0 0 20 20"
-        xmlns="http://www.w3.org/2000/svg"
-        stroke="currentColor"
-        strokeWidth="0.5"
-      >
-        <path
-          d="M14.2 14.2H17V6.9375C17 4.76288 15.2371 3 13.0625 3H5.8V5.8M14.2 14.2V7.79063L7.79062 14.2H14.2ZM14.2 14.2V17H6.9375C4.76288 17 3 15.2371 3 13.0625V5.8H5.8M5.8 5.8V12.2313L12.2313 5.8H5.8Z"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <p
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: 'calc(50% + 56px)',
-          transform: 'translateX(-50%)',
-          whiteSpace: 'nowrap',
-          fontSize: '14px',
-          fontWeight: 500,
-          color: 'light-dark(#71717a, #a1a1aa)',
-        }}
-      >
-        Your v0 generation will show here.
-      </p>
-    </main>
-  )
+'use client'
+
+import { useMemo, useState } from 'react'
+import { ArrowLeft, ArrowRight, CalendarDays, ChevronDown, Clock3, Compass, Dumbbell, Heart, MapPin, Music2, Palette, Sparkles, Users, HeartHandshake } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+
+const cities = ['Seattle', 'Portland', 'Austin', 'Brooklyn']
+const categories = ['All events', 'Community', 'Social', 'Sports', 'Music', 'Arts', 'HeartHandshake']
+const events = [
+  { id: 1, title: 'Sunday Makers Market', category: 'Community', date: 'Sat, Sep 19', time: '10:00 AM – 3:00 PM', location: 'Pioneer Square', description: 'Browse work from local makers, share a coffee, and meet the people shaping Seattle’s creative scene.', longDescription: 'Spend a relaxed Saturday meeting the makers, artists, and small-business owners who make Seattle feel like home. The market brings together handmade goods, food pop-ups, music, and plenty of easy ways to start a conversation.', expect: '40+ local vendors, live acoustic sets, coffee from Elm Roastery, and a welcoming crowd of neighbors and newcomers.', color: 'sun' },
+  { id: 2, title: 'Golden Gardens Beach Cleanup', category: 'Volunteering', date: 'Sun, Sep 20', time: '9:30 AM – 12:00 PM', location: 'Golden Gardens Park', description: 'Join a friendly crew for a morning of fresh air, small wins, and a cleaner shoreline.', longDescription: 'Start your Sunday by doing something good with a group of people who care about this place. EarthCorps provides gloves, bags, and a quick orientation before we spread out along the beach.', expect: 'A low-pressure volunteer morning, warm drinks afterward, and a chance to connect with other environmentally minded locals.', color: 'sage' },
+  { id: 3, title: 'Capitol Hill Community Run', category: 'Sports', date: 'Tue, Sep 22', time: '6:30 PM – 7:45 PM', location: 'Cal Anderson Park', description: 'A social 5K with no stopwatch required. All paces welcome, especially first-timers.', longDescription: 'Meet at Cal Anderson for an easygoing neighborhood run led by locals who believe movement is better together. Choose a 2-mile or 5K route, then stick around for a casual cool-down.', expect: 'A supportive pace group, route buddies, and a post-run hangout at a nearby café.', color: 'blue' },
+  { id: 4, title: 'Tiny Desk: Live at The Crocodile', category: 'Music', date: 'Thu, Sep 24', time: '7:00 PM – 9:30 PM', location: 'Belltown', description: 'Three emerging Seattle artists share an intimate stage and the stories behind their songs.', longDescription: 'Hear three emerging artists in an intimate room where the sound is close and the crowd is curious. This monthly series is a favorite for discovering new music without needing to know anyone beforehand.', expect: 'Three live sets, a thoughtfully curated crowd, and plenty to talk about between performances.', color: 'coral' },
+  { id: 5, title: 'New in Seattle Picnic', category: 'Social', date: 'Sat, Sep 26', time: '12:00 PM – 2:30 PM', location: 'Volunteer Park', description: 'Bring a snack or simply bring yourself. A sunny, hosted picnic for people finding their footing.', longDescription: 'Moving somewhere new is easier when you have a table to sit at. This hosted picnic is designed for anyone new to Seattle, with conversation prompts, lawn games, and plenty of room to simply be yourself.', expect: 'Simple conversation starters, lawn games, a shared snack table, and a mix of longtime locals and recent arrivals.', color: 'lavender' },
+]
+const iconFor = (category: string) => category === 'Sports' ? Dumbbell : category === 'Music' ? Music2 : category === 'Arts' ? Palette : category === 'HeartHandshake' ? HeartHandshake : category === 'Social' ? Users : Compass
+
+export default function Home() {
+  const [screen, setScreen] = useState<'landing' | 'events' | 'detail'>('landing')
+  const [city, setCity] = useState('Seattle')
+  const [category, setCategory] = useState('All events')
+  const [selectedEvent, setSelectedEvent] = useState(events[4])
+  const [interested, setInterested] = useState(false)
+  const filteredEvents = useMemo(() => category === 'All events' ? events : events.filter((event) => event.category === category), [category])
+  const openEvent = (event: typeof events[number]) => { setSelectedEvent(event); setInterested(false); setScreen('detail') }
+
+  return <main className="min-h-screen overflow-hidden bg-background text-foreground">
+    <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 md:px-10">
+      <button className="flex items-center gap-2 font-serif text-xl font-semibold tracking-tight" onClick={() => setScreen('landing')} aria-label="Go to home"><span className="grid size-8 place-items-center rounded-full bg-primary text-primary-foreground"><Heart className="size-4 fill-current" /></span>nearby</button>
+      {screen !== 'landing' && <button onClick={() => setScreen(screen === 'detail' ? 'events' : 'landing')} className="flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"><ArrowLeft className="size-4" /> {screen === 'detail' ? 'All events' : 'Change city'}</button>}
+    </header>
+    {screen === 'landing' && <section className="mx-auto grid min-h-[calc(100vh-96px)] w-full max-w-7xl items-center gap-12 px-6 pb-16 md:grid-cols-[1.05fr_.95fr] md:px-10 md:pb-20"><div className="max-w-xl"><div className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground"><Sparkles className="size-3.5 text-primary" /> Made for new beginnings</div><h1 className="font-serif text-6xl font-semibold leading-[.95] tracking-[-0.055em] text-balance md:text-8xl">Find your people, <em className="text-primary">wherever</em> you are.</h1><p className="mt-7 max-w-md text-lg leading-8 text-muted-foreground">Discover local events and gatherings happening in your city. A little community can make anywhere feel like home.</p><div className="mt-10 max-w-md rounded-2xl border border-border bg-card p-2 shadow-[0_14px_40px_rgba(47,42,38,.08)]"><label className="flex items-center gap-3 rounded-xl px-4 py-2"><MapPin className="size-5 text-primary" /><span className="sr-only">Choose a city</span><select value={city} onChange={(event) => setCity(event.target.value)} className="w-full cursor-pointer appearance-none bg-transparent py-2 font-medium outline-none"><optgroup label="Explore a city">{cities.map((item) => <option key={item}>{item}</option>)}</optgroup></select><ChevronDown className="size-4 text-muted-foreground" /></label><Button onClick={() => setScreen('events')} className="h-12 w-full rounded-xl text-base">See what’s happening <ArrowRight className="ml-2 size-4" /></Button></div><p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground"><Users className="size-3.5" /> Built for curious people and kind communities</p></div><div className="relative mx-auto w-full max-w-[520px]"><div className="relative aspect-square rotate-2 rounded-[2.5rem] bg-primary p-5 shadow-[16px_20px_0_hsl(var(--foreground)/.08)] md:p-8"><div className="flex h-full flex-col rounded-[1.75rem] bg-card p-6 md:p-8"><div className="flex items-center justify-between"><span className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">September 2026</span><CalendarDays className="size-5 text-primary" /></div><div className="mt-8 grid grid-cols-7 gap-y-5 text-center text-xs text-muted-foreground">{['M','T','W','T','F','S','S'].map((day, index) => <span key={index} className="font-semibold">{day}</span>)}{Array.from({ length: 30 }, (_, index) => <span key={index} className={`relative grid place-items-center ${[4, 8, 13, 18, 22, 26].includes(index) ? 'font-bold text-foreground' : ''}`}>{index + 1}{[4, 8, 13, 18, 22, 26].includes(index) && <span className="absolute -bottom-1 size-1 rounded-full bg-primary" />}</span>)}</div><div className="mt-auto rounded-xl bg-secondary p-4"><div className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-lg bg-primary/15 text-primary"><Users className="size-4" /></span><div><p className="text-sm font-semibold">12 ways to connect</p><p className="text-xs text-muted-foreground">waiting in your city</p></div></div></div></div></div><div className="absolute -bottom-6 -left-4 rounded-2xl border border-border bg-card p-4 shadow-lg md:-left-10"><p className="font-serif text-2xl font-semibold">hello, neighbor</p><p className="mt-1 text-xs text-muted-foreground">your next good thing is close</p></div></div></section>}
+    {screen === 'events' && <section className="mx-auto w-full max-w-7xl px-6 pb-16 md:px-10 md:pb-20"><div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end"><div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">{city} / find your people</p><h1 className="mt-3 font-serif text-5xl font-semibold tracking-[-.04em] md:text-7xl">What’s happening<br /><em className="text-primary">nearby.</em></h1></div><div className="max-w-xs text-sm leading-6 text-muted-foreground">Small plans can lead to big connections. Browse gatherings picked for curious newcomers.</div></div><div className="mb-8 flex gap-2 overflow-x-auto pb-2">{categories.map((item) => <button key={item} onClick={() => setCategory(item)} className={`whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition-colors ${category === item ? 'border-foreground bg-foreground text-background' : 'border-border bg-card text-muted-foreground hover:border-foreground hover:text-foreground'}`}>{item}</button>)}</div><div className="grid gap-4 md:grid-cols-2">{filteredEvents.map((event) => { const Icon = iconFor(event.category); return <button key={event.id} onClick={() => openEvent(event)} className="group text-left"><article className="flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-foreground hover:shadow-[0_14px_30px_rgba(47,42,38,.09)]"><div><div className="flex items-start justify-between"><span className={`grid size-11 place-items-center rounded-xl event-${event.color}`}><Icon className="size-5" /></span><span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">{event.category}</span></div><h2 className="mt-8 font-serif text-3xl font-semibold tracking-[-.03em]">{event.title}</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">{event.description}</p></div><div className="mt-8 flex flex-wrap gap-x-5 gap-y-2 border-t border-border pt-4 text-xs font-medium text-muted-foreground"><span className="flex items-center gap-1.5"><CalendarDays className="size-3.5 text-primary" />{event.date}</span><span className="flex items-center gap-1.5"><Clock3 className="size-3.5 text-primary" />{event.time}</span><span className="flex items-center gap-1.5"><MapPin className="size-3.5 text-primary" />{event.location}</span></div></article></button> })}</div></section>}
+    {screen === 'detail' && <section className="mx-auto w-full max-w-7xl px-6 pb-16 md:px-10 md:pb-20"><div className={`mb-8 rounded-3xl p-8 md:p-12 event-${selectedEvent.color}`}><div className="flex items-center gap-2 text-sm font-semibold"><span className="rounded-full bg-background/60 px-3 py-1">{selectedEvent.category}</span><span className="text-foreground/60">/</span><span>in {city}</span></div><h1 className="mt-8 max-w-3xl font-serif text-5xl font-semibold leading-[.98] tracking-[-.05em] md:text-8xl">{selectedEvent.title}</h1></div><div className="grid gap-10 md:grid-cols-[1fr_320px] md:px-8"><div><div className="grid gap-4 border-b border-border pb-8 sm:grid-cols-3"><div className="flex gap-3"><CalendarDays className="mt-1 size-5 text-primary" /><div><p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">When</p><p className="mt-1 text-sm font-medium">{selectedEvent.date}<br />{selectedEvent.time}</p></div></div><div className="flex gap-3"><MapPin className="mt-1 size-5 text-primary" /><div><p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Where</p><p className="mt-1 text-sm font-medium">{selectedEvent.location}<br />Seattle, WA</p></div></div><div className="flex gap-3"><Users className="mt-1 size-5 text-primary" /><div><p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Good for</p><p className="mt-1 text-sm font-medium">Meeting people<br />and trying something new</p></div></div></div><div className="max-w-2xl py-8"><h2 className="font-serif text-3xl font-semibold">A little more about it</h2><p className="mt-4 text-base leading-8 text-muted-foreground">{selectedEvent.longDescription}</p><h2 className="mt-10 font-serif text-3xl font-semibold">What to expect</h2><p className="mt-4 text-base leading-8 text-muted-foreground">{selectedEvent.expect}</p></div></div><aside className="h-fit rounded-2xl border border-border bg-card p-6 md:sticky md:top-6"><p className="font-serif text-2xl font-semibold">Feel like your kind of thing?</p><p className="mt-2 text-sm leading-6 text-muted-foreground">There’s no pressure to know anyone before you arrive. Just show up as you are.</p><Button onClick={() => setInterested(!interested)} className={`mt-6 h-12 w-full rounded-xl ${interested ? 'bg-foreground text-background hover:bg-foreground/90' : ''}`}>{interested ? 'You’re interested' : 'I’m interested'} <Heart className={`ml-2 size-4 ${interested ? 'fill-current' : ''}`} /></Button><p className="mt-3 text-center text-xs text-muted-foreground">No account needed for this mock-up</p></aside></div></section>}
+  </main>
 }
