@@ -96,8 +96,9 @@ The landing screen signals the primary capability and fundamental value at first
 
 The AI added subtitles and icons that took focus away from the main title which points towards the primary capibility.
 
-Before: (This was the only screenshot I could get from the first build and it does not show all the elements that distract from the title.)
-<img width="960" height="537" alt="image" src="https://github.com/user-attachments/assets/75aba51d-d32f-42d9-8f91-7c5f65377c97" />
+Before:
+<img width="1918" height="1062" alt="image" src="https://github.com/user-attachments/assets/a5ff7892-ac79-4260-abf6-94e15ac55eef" />
+
 
 After:
 <img width="960" height="537" alt="image" src="https://github.com/user-attachments/assets/7a97632e-f7e4-422a-b7ee-47551012e64f" />
